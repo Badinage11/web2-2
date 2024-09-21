@@ -9,7 +9,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get("/", (req, res)=>{
-	connection.query("select * from concert", (err, records,fields)=> {
+	connection.query("select * from FUNDRAISER", (err, records,fields)=> {
 		 if (err){
 			 console.error("Error while retrieve the data");
 		 }else{
