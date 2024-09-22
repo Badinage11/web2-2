@@ -29,7 +29,7 @@ var router = express.Router();
 // })
 
 
-
+//Get all active fundraising activities, including categories
 router.get("/fundraisers", (req, res) => {
 	const query = `
 	  SELECT f.*, c.NAME AS category_name
@@ -47,6 +47,23 @@ router.get("/fundraisers", (req, res) => {
 	  }
 	});
   });
+
+
+  
+  //Get all categories:
+  router.get("/categories", (req, res) => {
+	const query = 'SELECT * FROM CATEGORY';
+	
+	connection.query(query, (err, records, fields) => {
+	  if (err) {
+		console.error("Error while retrieving the data:", err);
+		res.status(500).json({ error: 'Internal server error' });
+	  } else {
+		res.send(records);
+	  }
+	});
+  });
+  
   
   
   
