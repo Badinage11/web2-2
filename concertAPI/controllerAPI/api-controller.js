@@ -41,7 +41,7 @@ router.get("/fundraisers", (req, res) => {
 	connection.query(query, (err, records, fields) => {
 	  if (err) {
 		console.error("Error while retrieving the data:", err);
-		res.status(500).json({ error: 'Internal server error' });
+		
 	  } else {
 		res.send(records);
 	  }
@@ -57,12 +57,46 @@ router.get("/fundraisers", (req, res) => {
 	connection.query(query, (err, records, fields) => {
 	  if (err) {
 		console.error("Error while retrieving the data:", err);
-		res.status(500).json({ error: 'Internal server error' });
+		
 	  } else {
 		res.send(records);
 	  }
 	});
   });
+  
+
+  //Search for fundraising activities that meet relevant criteria
+  router.get("/search", (req, res) => {
+	const { CATEGORY, CITY, ORGANIZER } = req.query;
+	let sql = "SELECT f.*, c.NAME AS category_name FROM FUNDRAISER f JOIN CATEGORY c ON f.CATEGORY_ID = c.CATEGORY_ID WHERE f.ACTIVE = 1";
+	let params = [];
+  
+	if (CATEGORY || CITY || ORGANIZER) {
+	  if (CATEGORY) {
+		sql += " AND c.CATEGORY_ID = ?";
+		params.push(CATEGORY);
+	  }
+	  if (CITY) {
+		sql += " AND f.CITY LIKE ?";
+		params.push("%" + CITY + "%");
+	  }
+	  if (ORGANIZER) {
+		sql += " AND f.ORGANIZER LIKE ?";
+		params.push("%" + ORGANIZER + "%");
+	  }
+	}
+  
+	connection.query(sql, params, (err, results) => {
+	  if (err) {
+		console.log("Query error occurred:", err);
+		
+	  } else {
+		res.json(results);
+	  }
+	});
+  });
+  
+  
   
   
   
