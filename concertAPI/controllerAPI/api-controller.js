@@ -8,26 +8,6 @@ var express = require('express');
 
 var router = express.Router();
 
-// router.get("/", (req, res)=>{
-// 	connection.query("select * from FUNDRAISER", (err, records,fields)=> {
-// 		 if (err){
-// 			 console.error("Error while retrieve the data");
-// 		 }else{
-// 			 res.send(records);
-// 		 }
-// 	})
-// })
-
-// router.get("/category", (req, res)=>{
-// 	connection.query("select * from CATEGORY", (err, records,fields)=> {
-// 		 if (err){
-// 			 console.error("Error while retrieve the data");
-// 		 }else{
-// 			 res.send(records);
-// 		 }
-// 	})
-// })
-
 
 //Get all active fundraising activities, including categories
 router.get("/fundraisers", (req, res) => {
@@ -91,16 +71,34 @@ router.get("/fundraisers", (req, res) => {
 		console.log("Query error occurred:", err);
 		
 	  } else {
-		res.json(results);
+		res.send(records);
 	  }
 	});
   });
   
+
+
+
+  //Query detailed information of activities through ID
+  router.get("/fundraiser/:id", (req, res) => {
+	const { id } = req.params;
+	const query = `
+	  SELECT f.*, c.NAME AS category_name
+	  FROM FUNDRAISER f
+	  JOIN CATEGORY c ON f.CATEGORY_ID = c.CATEGORY_ID
+	  WHERE f.FUNDRAISER_ID = ?
+	`;
+	
+	connection.query(query, [id], (err, records, fields) => {
+	  if (err) {
+		console.error("Error while retrieving the data:", err);
+	} else {
+		res.send(records);
+	  }
+	});
+  });
   
-  
-  
-  
-  
+
 
 
 module.exports = router;
