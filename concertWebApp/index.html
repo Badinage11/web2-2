@@ -1,0 +1,190 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+      <title>Main page</title>
+  </head>
+  <body>
+      CONVENTION CENTRE XYZ<br>
+
+      <img src="header.jpg" width="400">
+
+      <h1>Welcome page</h1>
+
+       <span>Home</span> |
+       <a href="/concert"><span>Concerts</span></a>  |
+       <a href="/add_concert"><span>Add a new concert</span></a> -->
+
+       <!DOCTYPE html>
+       <html lang="zh">
+       <head>
+           <meta charset="UTF-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <title>非营利组织主页</title>
+           <style>
+               body {
+                   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                   margin: 0;
+                   padding: 0;
+                   background-color: #f4f4f9;
+               }
+       
+               header {
+                   background-color: #007BFF;
+                   color: white;
+                   padding: 20px 0;
+                   text-align: center;
+               }
+       
+               .site-title {
+                   font-size: 28px;
+                   font-weight: bold;
+                   margin-bottom: 10px;
+               }
+       
+               nav ul {
+                   list-style: none;
+                   padding: 0;
+                   margin: 0;
+                   display: flex;
+                   justify-content: center;
+               }
+       
+               nav ul li {
+                   margin: 0 15px;
+               }
+       
+               nav ul li a {
+                   color: white;
+                   text-decoration: none;
+                   font-weight: bold;
+               }
+       
+               main {
+                   padding: 20px;
+               }
+       
+               section {
+                   margin-bottom: 40px;
+                   padding: 20px;
+                   background-color: white;
+                   border-radius: 8px;
+                   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+               }
+       
+               section h1, section h2 {
+                   font-size: 24px;
+                   margin-bottom: 10px;
+                   color: #333;
+               }
+       
+               section p {
+                   font-size: 16px;
+                   color: #555;
+                   line-height: 1.6;
+               }
+       
+               #fundraisers {
+                   display: flex;
+                   flex-wrap: wrap;
+                   gap: 20px;
+                   justify-content: center;
+               }
+       
+               .fundraiser-card {
+                   background-color: white;
+                   border: 1px solid #ddd;
+                   border-radius: 8px;
+                   padding: 15px;
+                   width: 300px;
+                   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+               }
+       
+               .fundraiser-card h3 {
+                   font-size: 18px;
+                   margin-top: 0;
+               }
+       
+               .fundraiser-card p {
+                   font-size: 14px;
+                   color: #555;
+                   margin: 5px 0;
+               }
+       
+               footer {
+                   background-color: #007BFF;
+                   color: white;
+                   text-align: center;
+                   padding: 10px 0;
+                   font-size: 14px;
+                   line-height: 1.4;
+               }
+           </style>
+       </head>
+       <body>
+           <header>
+               <div class="site-title">Crowdfunding Website</div>
+               <nav>
+                   <ul>
+                       <li><a href="index.html">Home page</a></li>
+                       <li><a href="concert.html">Search fundraisers</a></li>
+                       <li><a href="add_concert.html">Fundraisers</a></li>
+                   </ul>
+               </nav>
+           </header>
+           <main>
+               <section id="welcome">
+                   <h1>Welcome to Crowdfunding Website</h1>
+                   <p>Our mission is to support community projects around the world, from protecting the natural environment to providing educational assistance.</p>
+                   <p>We believe that every small contribution can bring about significant change.</p>
+                   <p>Join us and contribute to the future of the Earth together</p>
+               </section>
+               <section id="inspiring-stories">
+                   <h2>The inspiring story</h2>
+                   <p>Here are some inspiring stories</p>
+                   <p>In Sydney, David Brown is working hard to build firebreaks to protect communities from wildfires. Although there is still a long way to go from the target, they have received funding support of 7000.00 AUD to help them continue advancing this important project.</p>
+                   <p>In Melbourne, Richard Martin's team is establishing protected areas for wildlife. They have already raised 18000.00 AUD, one step closer to their goal of 90000.00 AUD. This project will provide a safe home for local wildlife.</p>
+                   <p>In Guilin, Linda Thomas is raising funds for students to donate more books. At present, we have raised 2000.00 AUD, which is only one step away from our goal of 3000.00 AUD. Every book will ignite children's thirst for knowledge.</p>
+                   <p>In New York, Barbara Jackson is dedicated to restoring damaged ecosystems through tree planting. Although only 2000.00 AUD has been raised so far, her team is confident and hopes to raise 7000.00 AUD in the future.</p>
+                   <p>In California, James White is raising funds for an education fund. They have raised 5500.00 AUD to help more students access better educational opportunities.</p>
+               </section>
+               <section id="fundraisers">
+                   <h2>Active fundraising activities</h2>
+                   <!-- 筹款活动卡片将由JavaScript填充 -->
+               </section>
+           </main>
+           <footer>
+               <p>Follow us on social media!</p>
+               <p>Email: 178577450@qq.com</p>
+               <p>Phone: (86) 15851571877</p>
+               <p>&copy; 2024 Crowdfunding Website</p>
+           </footer>
+           <script>
+               document.addEventListener('DOMContentLoaded', () => {
+                   fetch('http://localhost:3060/api/fundraiser/fundraisers')
+                       .then(response => response.json())
+                       .then(data => {
+                           const fundraiserList = document.getElementById('fundraisers');
+                           data.forEach(fundraiser => {
+                               if (fundraiser.ACTIVE) {
+                                   const card = document.createElement('div');
+                                   card.className = 'fundraiser-card';
+                                   card.innerHTML = `
+                                       <h3>${fundraiser.CAPTION}</h3>
+                                       <p>Organizer: ${fundraiser.ORGANIZER}</p>
+                                       <p>Target amount: ${fundraiser.TARGET_FUNDING} AUD</p>
+                                       <p>Current amount: ${fundraiser.CURRENT_FUNDING} AUD</p>
+                                       <p>City: ${fundraiser.CITY}</p>
+                                       <p>Category: ${fundraiser.category_name}</p>
+                                       <img src="${fundraiser.IMAGE_URL}" alt="${fundraiser.CAPTION}" style="width: 100%; height: auto; border-radius: 5px;">
+                                   `;
+                                   fundraiserList.appendChild(card);
+                               }
+                           });
+                       })
+                       .catch(error => console.error('获取筹款活动时出错:', error));
+               });
+           </script>
+       </body>
+       </html>
+       
+       

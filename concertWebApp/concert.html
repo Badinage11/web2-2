@@ -1,0 +1,357 @@
+<!-- <!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Fundraisers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .fundraiser-list {
+            margin-top: 20px;
+        }
+
+        .fundraiser-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .fundraiser-item a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .fundraiser-item p {
+            margin: 5px 0;
+        }
+
+        .view-details {
+            display: block;
+            margin-top: 10px;
+            color: #007BFF;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Search Fundraisers</h1>
+    </header>
+    <main>
+        <form id="searchForm">
+            <div>
+                <label for="organizer">Organizer:</label>
+                <input type="text" id="organizer" name="organizer">
+            </div>
+            <div>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div>
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category">
+            </div>
+            <div>
+                <button type="button" onclick="searchFundraisers()">Search</button>
+                <button type="button" onclick="clearInputs()">Clear</button>
+            </div>
+        </form>
+        <div id="errorMessage" class="error"></div>
+        <div id="fundraiserList" class="fundraiser-list"></div>
+    </main>
+
+    <script>
+        function searchFundraisers() {
+            const organizer = document.getElementById('organizer').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const category = document.getElementById('category').value.trim();
+
+            if (!organizer && !city && !category) {
+                document.getElementById('errorMessage').textContent = 'Please select at least one criteria.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+
+            const apiUrl = `http://localhost:3060/api/fundraiser/search?ORGANIZER=${encodeURIComponent(organizer)}&CITY=${encodeURIComponent(city)}&category_name=${encodeURIComponent(category)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const fundraiserList = document.getElementById('fundraiserList');
+                    fundraiserList.innerHTML = '';
+
+                    if (data.length === 0) {
+                        document.getElementById('errorMessage').textContent = 'No fundraisers found.';
+                        return;
+                    }
+
+                    data.forEach(fundraiser => {
+                        const item = document.createElement('div');
+                        item.className = 'fundraiser-item';
+                        item.innerHTML = `
+                            <a href="/fundraiser/${fundraiser.FUNDRAISER_ID}">${fundraiser.CAPTION}</a>
+                            <p>Organizer: ${fundraiser.ORGANIZER}</p>
+                            <p>Target amount: ${fundraiser.TARGET_FUNDING} AUD</p>
+                            <p>Current amount: ${fundraiser.CURRENT_FUNDING} AUD</p>
+                            <p>City: ${fundraiser.CITY}</p>
+                            <p>Category: ${fundraiser.category_name}</p>
+                            <img src="${fundraiser.IMAGE_URL}" alt="${fundraiser.CAPTION}" style="width: 100%; height: auto; border-radius: 5px;">
+                            <a href="file:///C:/Users/Lenovo/Desktop/web2-2/web2-2/concertWebApp/add_concert.html" class="view-details">View Details</a>
+                        `;
+                        fundraiserList.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching fundraisers:', error);
+                    document.getElementById('errorMessage').textContent = 'An error occurred while fetching data.';
+                });
+        }
+
+        function clearInputs() {
+            document.getElementById('organizer').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('category').value = '';
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fundraiserList').innerHTML = '';
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Fundraisers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .fundraiser-list {
+            margin-top: 20px;
+        }
+
+        .fundraiser-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .fundraiser-item p {
+            margin: 5px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .view-details {
+            display: block;
+            margin-top: 10px;
+            color: #007BFF;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Search Fundraisers</h1>
+    </header>
+    <main>
+        <form id="searchForm">
+            <div>
+                <label for="organizer">Organizer:</label>
+                <input type="text" id="organizer" name="organizer">
+            </div>
+            <div>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div>
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category">
+            </div>
+            <div>
+                <button type="button" onclick="searchFundraisers()">Search</button>
+                <button type="button" onclick="clearInputs()">Clear</button>
+            </div>
+        </form>
+        <div id="errorMessage" class="error"></div>
+        <div id="fundraiserList" class="fundraiser-list"></div>
+    </main>
+
+    <script>
+        function searchFundraisers() {
+            const organizer = document.getElementById('organizer').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const category = document.getElementById('category').value.trim();
+
+            if (!organizer && !city && !category) {
+                document.getElementById('errorMessage').textContent = 'Please select at least one criteria.';
+                return;
+            }
+
+            document.getElementById('errorMessage').textContent = '';
+
+            const apiUrl = `http://localhost:3060/api/fundraiser/search?ORGANIZER=${encodeURIComponent(organizer)}&CITY=${encodeURIComponent(city)}&category_name=${encodeURIComponent(category)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const fundraiserList = document.getElementById('fundraiserList');
+                    fundraiserList.innerHTML = '';
+
+                    if (data.length === 0) {
+                        document.getElementById('errorMessage').textContent = 'No fundraisers found.';
+                        return;
+                    }
+
+                    data.forEach(fundraiser => {
+                        const item = document.createElement('div');
+                        item.className = 'fundraiser-item';
+                        item.innerHTML = `
+                            <p>${fundraiser.CAPTION}</p>
+                            <p>Organizer: ${fundraiser.ORGANIZER}</p>
+                            <p>Target amount: ${fundraiser.TARGET_FUNDING} AUD</p>
+                            <p>Current amount: ${fundraiser.CURRENT_FUNDING} AUD</p>
+                            <p>City: ${fundraiser.CITY}</p>
+                            <p>Category: ${fundraiser.category_name}</p>
+                            <img src="${fundraiser.IMAGE_URL}" alt="${fundraiser.CAPTION}" style="width: 100%; height: auto; border-radius: 5px;">
+                            <a href="/add_concert?FUNDRAISER_ID=${fundraiser.FUNDRAISER_ID}" class="view-details">View Details</a>
+                        `;
+                        fundraiserList.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching fundraisers:', error);
+                    document.getElementById('errorMessage').textContent = 'An error occurred while fetching data.';
+                });
+        }
+
+        function clearInputs() {
+            document.getElementById('organizer').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('category').value = '';
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('fundraiserList').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
+
+

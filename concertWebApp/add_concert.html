@@ -1,0 +1,188 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+      <title>Main page</title>
+  </head>
+  <body>
+      CONVENTION CENTRE XYZ<br>
+
+      <img src="header.jpg" width="400">
+
+      <h1>Add a new concert</h1>
+
+       <a href="/"><span>Home</span></a> |
+       <a href="/concert"><span>Concerts</span></a>  |
+       <span>Add a new concert</span>
+
+       <form id="form1" onsubmit="addConcert(); return(false);">
+         <label>ID*: </label>
+         <input type="text" id="txtID" placeholder="Enter ID" required>
+
+         <label>Artist name*: </label>
+         <input type="text" id="txtArtistName" placeholder="Enter artist name" required>
+
+         <label>Location*: </label>
+         <input type="text" id="txtLocation" placeholder="Enter location" required>
+
+         <input type="reset" value="Clear">
+         <input type="submit" value="Submit">
+       </form>
+
+       <script>
+         function addConcert(){
+                 // Get values from the form using DOM
+           const ConcertID = document.getElementById('txtID').value.trim();
+           const ArtistName = document.getElementById('txtArtistName').value.trim();
+           const Location = document.getElementById('txtLocation').value.trim();
+
+           // Validate the form. Assume, all fields are required
+           if (!ConcertID || !ArtistName || !Location) {
+                 alert("All fields are required!");
+                 return;
+             }
+
+             // Create a data (JSON) to send in the POST request
+             const postData = { 'ConcertID':ConcertID, 'ArtistName':ArtistName, 'Location':Location };
+             alert(JSON.stringify(postData));
+
+             // Send the POST request to NodeJS API server
+             fetch('http://localhost:3060/api/concerts', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify(postData)
+             })
+             .then(response => response.json())
+             .then(data => {
+                 if (data.insert === 'success') {
+                     alert("Concert added successfully!");
+                     document.getElementById('form1').reset(); // to clear the form
+                 } else if (data.insert === 'error') {
+                     alert("Error: " + data.message);
+                 }
+             })
+             .catch(error => {
+                 console.error("Error:", error);
+             });
+         }
+        </script>
+
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraiser Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .details-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .donate-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .donate-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="details-container" id="fundraiserDetails">
+        <!-- Fundraiser details will be inserted here -->
+    </div>
+
+    <script>
+        function getFundraiserId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function fetchFundraiserDetails() {
+            
+
+            const currentUrl = window.location.href;
+            const urlParams = new URLSearchParams(new URL(currentUrl).search);
+            const fundraiserId = urlParams.get('FUNDRAISER_ID');
+
+        
+
+            fetch(`http://localhost:3060/api/fundraiser/fundraiser/${fundraiserId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        document.getElementById('fundraiserDetails').innerHTML = '<p>No fundraiser found.</p>';
+                        return;
+                    }
+
+                    const fundraiser = data[0];
+                    const container = document.getElementById('fundraiserDetails');
+                    container.innerHTML = `
+                        <h1>${fundraiser.CAPTION}</h1>
+                        <p><strong>Organizer:</strong> ${fundraiser.ORGANIZER}</p>
+                        <p><strong>Target Amount:</strong> ${fundraiser.TARGET_FUNDING} AUD</p>
+                        <p><strong>Current Amount:</strong> ${fundraiser.CURRENT_FUNDING} AUD</p>
+                        <p><strong>City:</strong> ${fundraiser.CITY}</p>
+                        <p><strong>Category:</strong> ${fundraiser.category_name}</p>
+                        <img src="${fundraiser.IMAGE_URL}" alt="${fundraiser.CAPTION}">
+                        <button class="donate-button" onclick="showDonateDialog()">Donate</button>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching fundraiser details:', error);
+                    document.getElementById('fundraiserDetails').innerHTML = '<p>Error loading fundraiser details.</p>';
+                });
+        }
+
+        function showDonateDialog() {
+            alert('This feature is under construction');
+        }
+
+        fetchFundraiserDetails();
+    </script>
+</body>
+
+</html>
