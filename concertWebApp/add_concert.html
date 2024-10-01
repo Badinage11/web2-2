@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fundraiser</title>
     <style>
+        /* The basic style of the webpage subject */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -16,6 +17,7 @@
             flex-direction: column;
         }
 
+        /* The styles for  the header */ 
         header {
             background-color: #007BFF;
             color: white;
@@ -23,11 +25,32 @@
             text-align: center;
         }
 
+        /* The forms of the navigation menu */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* The style of the main content */
         main {
             flex: 1;
             padding: 20px;
         }
 
+        /*  The style of the fundraiser details  */
         .details-container {
             max-width: 600px;
             margin: 0 auto;
@@ -47,6 +70,7 @@
             margin: 10px 0;
         }
 
+        /*  The style of image */
         img {
             width: 100%;
             height: auto;
@@ -54,6 +78,7 @@
             margin-top: 20px;
         }
 
+        /* The style of button */
         .donate-button {
             background-color: #007BFF;
             color: white;
@@ -71,6 +96,7 @@
             background-color: #0056b3;
         }
 
+        /* The footer's style */
         footer {
             background-color: #007BFF;
             color: white;
@@ -88,10 +114,17 @@
 <body>
     <header>
         <h1>Fundraisers</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home page</a></li>
+                <li><a href="concert.html">Search fundraisers</a></li>
+                <li><a href="add_concert.html">Fundraisers</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         <div class="details-container" id="fundraiserDetails">
-            <!-- Fundraiser details will be inserted here -->
+            <!-- Fundraiser details are inserted here -->
         </div>
     </main>
     <footer>
@@ -102,19 +135,24 @@
     </footer>
 
     <script>
+        //The function used to obtain and display detailed information about fundraising activities
         function fetchFundraiserDetails() {
+            //Used to retrieve the current URL and extract the fundraising ID from the query parameters
             const currentUrl = window.location.href;
             const urlParams = new URLSearchParams(new URL(currentUrl).search);
             const fundraiserId = urlParams.get('FUNDRAISER_ID');
 
+            //This is using an ID to retrieve detailed information about fundraisers from the API
             fetch(`http://localhost:3060/api/fundraiser/fundraiser/${fundraiserId}`)
                 .then(response => response.json())
                 .then(data => {
+                    // Check if data is returned, otherwise display message
                     if (data.length === 0) {
                         document.getElementById('fundraiserDetails').innerHTML = '<p>No fundraiser found.</p>';
                         return;
                     }
 
+                    //This is used to extract detailed information about fundraising activities and display it
                     const fundraiser = data[0];
                     const container = document.getElementById('fundraiserDetails');
                     container.innerHTML = `
@@ -124,22 +162,25 @@
                         <p><strong>Current Amount:</strong> ${fundraiser.CURRENT_FUNDING} AUD</p>
                         <p><strong>City:</strong> ${fundraiser.CITY}</p>
                         <p><strong>Category:</strong> ${fundraiser.category_name}</p>
-                        <img src="${fundraiser.IMAGE_URL}" alt="${fundraiser.CAPTION}">
                         <button class="donate-button" onclick="showDonateDialog()">Donate</button>
                     `;
                 })
                 .catch(error => {
+                    //This is handling errors and displaying messages
                     console.error('Error fetching fundraiser details:', error);
                     document.getElementById('fundraiserDetails').innerHTML = '<p>Error loading fundraiser details.</p>';
                 });
         }
 
+        //This is the function used to display the donation dialog box (currently under construction)
         function showDonateDialog() {
             alert('This feature is under construction');
         }
 
+        //This is a function called to retrieve detailed information about fundraising activities during page loading
         fetchFundraiserDetails();
     </script>
 </body>
 
 </html>
+
